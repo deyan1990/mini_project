@@ -3,6 +3,14 @@ var lives=3;
 var score=0;
 var fruits=[];
 var hero;
+var keys={
+    rkd:false,
+    lkd:false,
+    ukd:false,
+    dkd:false
+
+
+};
 
 function getStarted(){
     stage = new createjs.Stage(flower);
@@ -19,9 +27,61 @@ function getStarted(){
     hero.x=stage.canvas.width/2;
     hero.y=stage.canvas.height-hero.height;
 
+    window.addEventListener('keydown', fingerDown);
+    window.addEventListener('keyup', fingerUp);
+
     addFruit();
     
     
+}
+function fingerUp(e) {
+    if(e.keyCode===32){
+        fire();
+    }
+    if(e.keyCode===37){
+        keys.lkd=false;
+    }
+    if(e.keyCode===38){
+        keys.ukd=false;
+    }
+    if(e.keyCode===39){
+        keys.rkd=false;
+    }
+    if(e.keyCode===40){
+        keys.dkd=false;
+    }
+
+}
+
+function fingerDown(e) {
+
+    if(e.keyCode===37){
+        keys.lkd=true;
+    }
+    if(e.keyCode===38){
+        keys.ukd=true;
+    }
+    if(e.keyCode===39){
+        keys.rkd=true;
+    }
+    if(e.keyCode===40){
+        keys.dkd=true;
+    }
+}
+
+function moveHero() {
+    if(keys.rkd){
+        hero.x+=hero.speed;
+    }
+    if(keys.lkd){
+        hero.x-=hero.speed;
+    }
+    if(keys.ukd){
+        hero.y-=hero.speed;
+    }
+    if (keys.dkd){
+        hero.y+=hero.speed;
+    }
 }
 
 function addFruit(){
@@ -76,6 +136,7 @@ function tock(e){
 if(lives>0){
     addFruit();
     moveFruits();
-    }
+    };
+    moveHero();
     stage.update(e);
 }
