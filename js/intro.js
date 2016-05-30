@@ -11,7 +11,7 @@ function getStarted(){
     
     //hero
     
-    hero = createjs.Bitmap("img/hero.png");
+    hero =  new createjs.Bitmap("img/hero.png");
     hero.width=106;
     hero.height=89;
     stage.addChild(hero);
@@ -28,7 +28,7 @@ function addFruit(){
     var rand = Math.floor(Math.random()*100);
     var chance = 20+score;
     if(rand<2){
-    var pokemons = ['slice2.png', 'slice3.png', 'slice4.png', 'slice5.png', 'slice6.png', 'slice7.png', 'slice8.png'];
+    var pokemons = ['gar_1.png', 'gar_2.png', 'gar_3.png', 'gar_4.png', 'gar_5.png', 'gar_6.png', 'gar_7.png'];
     /*var index = Math.floor(Math.random()*pokemons.length);
     var myP=pokemons[index];   
     var p = new createjs.Bitmap('img/'+myP);*/
