@@ -31,7 +31,7 @@ function getStarted() {
     window.addEventListener('keydown', fingerDown);
     window.addEventListener('keyup', fingerUp);
 
-    addFruit();
+    addEnemies();
 
 
 }
@@ -101,21 +101,24 @@ function fingerDown(e) {
 
 
 
-function addFruit() {
+function addEnemies() {
     var rand = Math.floor(Math.random() * 100);
     var chance = 20 + score;
     if (rand < 2) {
         var gar = ['gar_1.png', 'gar_2.png', 'gar_3.png', 'gar_4.png', 'gar_5.png', 'gar_6.png', 'gar_7.png'];
         var p = new createjs.Bitmap('img/' + gar[Math.floor(Math.random() * gar.length)]);
+        p.width=50;
+        p.height=50;
         p.y = -100;
         p.x = Math.floor(Math.random() * stage.canvas.width);
+
         stage.addChild(p);
-        p.addEventListener(hitTest, removeFruit);
+        p.addEventListener(hitTest, removeEnemies);
         enemies.push(p);
     }
 }
 
-function removeFruit(e) {
+function removeEnemies(e) {
     score++;
     console.log("Score: " + score);
     stage.removeChild(e.target);
@@ -124,7 +127,7 @@ function removeFruit(e) {
 
 }
 
-function moveFruits() {
+function moveEnemies() {
     var i;
     var numEnemies = enemies.length;
     for (i = numEnemies - 1; i >= 0; i--) {
@@ -157,7 +160,7 @@ function checkCollisions() {
     var eLength=enemies.length-1;
     for (e=eLength; e>=0; e--){
             if(hitTest(enemies[e], hero)){
-                stage.removeFruit(enemies[e]);
+                stage.removeChild(enemies[e]);
                 enemies.splice(e, 1);
                 if(enemies.length===0){
                     level++;
@@ -176,8 +179,8 @@ function checkCollisions() {
 
 function tock(e) {
     if (lives > 0) {
-        addFruit();
-        moveFruits();
+        addEnemies();
+        moveEnemies();
         moveHero();
         checkCollisions();
     };
