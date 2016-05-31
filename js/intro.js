@@ -127,6 +127,17 @@ function addEnemies() {
         p.y = -100;
         p.x = Math.floor(Math.random() * stage.canvas.width);
 
+
+        //different places
+        for (var i = 0; i < enemies.length; i++) {
+            if (enemies[i].y < 0) {
+                while(p.x > enemies[i].x || p.x < enemies[i] + enemies[i].width) {
+                    p.x = Math.floor(Math.random() * stage.canvas.width);
+                }
+            }
+        }
+
+
         stage.addChild(p);
         stones.push(p);
     }
