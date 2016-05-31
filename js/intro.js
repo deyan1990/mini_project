@@ -1,6 +1,6 @@
 var stage;
 var level = 1;
-var scoreToNextLevel=2;
+var scoreToNextLevel=20;
 var lives = 3;
 var score = 0;
 var stones=[];
@@ -119,7 +119,7 @@ function addEnemies() {
        // p.addEventListener(hitTest, removeEnemies);
         enemies.push(p);
     }
-    if(rand<2){
+    if(level>1 && rand<1){
         var st= ["stone_1.png", 'stone_2.png', 'stone_3.png'];
         var p = new createjs.Bitmap('img/' + st[Math.floor(Math.random() * st.length)]);
         p.width=50;
@@ -140,30 +140,6 @@ function removeEnemies(e) {
 
 }
 
-function moveEnemies() {
-    var i;
-    var numEnemies = enemies.length;
-    for (i = numEnemies - 1; i >= 0; i--) {
-        enemies[i].y++;
-        if (enemies[i].y > stage.canvas.height + 30) {
-            lives--;
-            console.log("You just lost a life and have " + lives);
-            if (lives === 0) {
-                console.log("You are dead");
-            }
-            stage.removeChild(enemies[i]);
-            enemies.splice(i, 1);
-        }
-    }
-   numEnemies = stones.length;
-    for (i = numEnemies - 1; i >= 0; i--) {
-        stones[i].y++;
-        if (stones[i].y > stage.canvas.height + 30) {
-            stage.removeChild(stones[i]);
-            stones.splice(i, 1);
-        }
-    }
-}
 
 function hitTest(rect1, rect2){
     if(rect1.x>=rect2.x+rect2.width
@@ -176,7 +152,14 @@ function hitTest(rect1, rect2){
     return true;
 }
 
-function checkCollisions() {
+ function levelDown() {
+    lives--;
+    console.log("You just lost a life and have " + lives);
+    if (lives === 0) {
+        console.log("You are dead");
+    }
+}
+ function checkCollisions() {
     var e;
     var eLength=enemies.length-1;
     for (e=eLength; e>=0; e--){
@@ -187,29 +170,44 @@ function checkCollisions() {
             if(enemies.length===0){
                 level++;
                 addEnemies();
-
             }
             break;
-
         }
-
     }
     eLength=stones.length-1;
     for (e=eLength; e>=0; e--){
         if(hitTest(stones[e], hero)){
             stage.removeChild(stones[e]);
             stones.splice(e, 1);
+            levelDown();
             if(stones.length===0){
-                lives--;
                 addEnemies();
-
             }
             break;
-
         }
-
     }
 }
+ function moveEnemies() {
+    var i;
+    var numEnemies = enemies.length;
+    for (i = numEnemies - 1; i >= 0; i--) {
+        enemies[i].y++;
+        if (enemies[i].y > stage.canvas.height + 30) {
+            levelDown();
+            stage.removeChild(enemies[i]);
+            enemies.splice(i, 1);
+        }
+    }
+    numEnemies = stones.length;
+    for (i = numEnemies - 1; i >= 0; i--) {
+        stones[i].y++;
+        if (stones[i].y > stage.canvas.height + 30) {
+            stage.removeChild(stones[i]);
+            stones.splice(i, 1);
+        }
+    }
+}
+
 
 function scoreUp() {
     score++;
