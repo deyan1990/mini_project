@@ -119,8 +119,7 @@ function addEnemies() {
 }
 
 function removeEnemies(e) {
-    score++;
-    console.log("Score: " + score);
+    scoreUp();
     stage.removeChild(e.target);
     var index = enemies.indexOf(e.target);
     enemies.splice(index, 1);
@@ -159,20 +158,28 @@ function checkCollisions() {
     var e;
     var eLength=enemies.length-1;
     for (e=eLength; e>=0; e--){
-            if(hitTest(enemies[e], hero)){
-                stage.removeChild(enemies[e]);
-                enemies.splice(e, 1);
-                if(enemies.length===0){
-                    level++;
-                    addEnemies();
-
-                }
-                break;
+        if(hitTest(enemies[e], hero)){
+            stage.removeChild(enemies[e]);
+            enemies.splice(e, 1);
+            scoreUp();
+            if(enemies.length===0){
+                level++;
+                addEnemies();
 
             }
+            break;
+
+        }
 
     }
 }
+
+function scoreUp() {
+    score++;
+    console.log("Score: " + score);
+}
+
+
 
 
 
