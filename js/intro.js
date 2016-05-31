@@ -1,6 +1,9 @@
 var stage;
+var level = 1;
+var scoreToNextLevel=2;
 var lives = 3;
 var score = 0;
+var stones=[];
 var enemies = [];
 var hero;
 var keys = {
@@ -103,7 +106,7 @@ function fingerDown(e) {
 
 function addEnemies() {
     var rand = Math.floor(Math.random() * 100);
-    var chance = 20 + score;
+    var chance = level*scoreToNextLevel;
     if (rand < 2) {
         var gar = ['gar_1.png', 'gar_2.png', 'gar_3.png', 'gar_4.png', 'gar_5.png', 'gar_6.png', 'gar_7.png'];
         var p = new createjs.Bitmap('img/' + gar[Math.floor(Math.random() * gar.length)]);
@@ -113,8 +116,19 @@ function addEnemies() {
         p.x = Math.floor(Math.random() * stage.canvas.width);
 
         stage.addChild(p);
-        p.addEventListener(hitTest, removeEnemies);
+       // p.addEventListener(hitTest, removeEnemies);
         enemies.push(p);
+    }
+    if(rand<2){
+        var st= ["stone_1.png", 'stone_2.png', 'stone_3.png'];
+        var p = new createjs.Bitmap('img/' + st[Math.floor(Math.random() * st.length)]);
+        p.width=50;
+        p.height=50;
+        p.y = -100;
+        p.x = Math.floor(Math.random() * stage.canvas.width);
+
+        stage.addChild(p);
+        stones.push(p);
     }
 }
 
@@ -139,6 +153,14 @@ function moveEnemies() {
             }
             stage.removeChild(enemies[i]);
             enemies.splice(i, 1);
+        }
+    }
+   numEnemies = stones.length;
+    for (i = numEnemies - 1; i >= 0; i--) {
+        stones[i].y++;
+        if (stones[i].y > stage.canvas.height + 30) {
+            stage.removeChild(stones[i]);
+            stones.splice(i, 1);
         }
     }
 }
@@ -172,11 +194,30 @@ function checkCollisions() {
         }
 
     }
+    eLength=stones.length-1;
+    for (e=eLength; e>=0; e--){
+        if(hitTest(stones[e], hero)){
+            stage.removeChild(stones[e]);
+            stones.splice(e, 1);
+            if(stones.length===0){
+                lives--;
+                addEnemies();
+
+            }
+            break;
+
+        }
+
+    }
 }
 
 function scoreUp() {
     score++;
     console.log("Score: " + score);
+    if (score >= level*scoreToNextLevel) {
+        level++;
+        console.log("Level: " + level)
+    }
 }
 
 
