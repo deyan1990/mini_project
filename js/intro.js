@@ -129,15 +129,19 @@ function addEnemies() {
 
 
         //different places
-        for (var i = 0; i < enemies.length; i++) {
-            if (enemies[i].y < 0) {
-                while(p.x > enemies[i].x || p.x < enemies[i] + enemies[i].width) {
+        var goAgain=true;
+        while(goAgain){
+            goAgain=false;
+            for (var i = 0; i < enemies.length; i++) {
+                if (enemies[i].y < 0 && hitTest(p, enemies[i])) {
                     p.x = Math.floor(Math.random() * stage.canvas.width);
+                    goAgain=true;
+                    console.log("trying new position");
+                    break;
                 }
             }
         }
-
-
+        
         stage.addChild(p);
         stones.push(p);
     }
