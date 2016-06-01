@@ -35,9 +35,9 @@ function getStarted() {
     window.addEventListener('keyup', fingerUp);
 
     addEnemies();
-    scoreText = new createjs.Text("Score: ", "30 Courier", "#FFF"+level);
+    scoreText = new createjs.Text("Score: ", "30 Courier", "#FFF"+score);
     stage.addChild(scoreText);
-    console.log("Score: " + level);
+    console.log("Score: " + score);
 
 }
 
@@ -144,6 +144,18 @@ function addEnemies() {
             }
         }
 
+        while(goAgain){
+            goAgain=false;
+            for (var i = 0; i < enemies.length; i++) {
+                if (enemies[i].y < 0 && hitTest(p, enemies[i])) {
+                    p.x = Math.floor(Math.random() * stage.canvas.width);
+                    goAgain=true;
+                    console.log("trying new position");
+                    break;
+                }
+            }
+        }
+
         stage.addChild(p);
         stones.push(p);
     }
@@ -230,8 +242,9 @@ function scoreUp() {
     score++;
     if (score >= level*scoreToNextLevel) {
         level++;
-        console.log("Level: " + level)
+        console.log("Level: " + score)
     }
+    //scoreText="Score: "+score;
 }
 
 
@@ -242,7 +255,6 @@ function scoreUp() {
 function tock(e) {
     if (lives > 0) {
         addEnemies();
-        scoreText="Score: "+score;
         moveEnemies();
         moveHero();
         checkCollisions();
