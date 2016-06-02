@@ -1,7 +1,7 @@
-//var getStarted = false;
 var stage;
 var level = 1;
-var scoreToNextLevel = 2;
+var scoreToNextLevel = 20;
+var gameStarted = false;
 var lives = 3;
 var score = 0;
 var stones = [];
@@ -58,7 +58,7 @@ function getStarted() {
     splash.addEventListener('click', function (e) {
             console.log(e);
             stage.removeChild(e.target);
-            getStarted = true;
+            gameStarted = true;
         }
     );
     stage.addChild(splash);
@@ -273,9 +273,8 @@ function scoreUp() {
 
 }
 
-
 function tock(e) {
-    if (lives > 0) {
+    if (gameStarted && lives > 0) {
         addEnemies();
         moveEnemies();
         moveHero();
