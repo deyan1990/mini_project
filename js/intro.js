@@ -1,6 +1,6 @@
 var stage;
 var level = 1;
-var scoreToNextLevel=20;
+var scoreToNextLevel=2;
 var lives = 3;
 var score = 0;
 var stones=[];
@@ -15,6 +15,8 @@ var keys = {
 
 };
 var scoreText;
+var levelText;
+var livesText;
 
 function getStarted() {
     stage = new createjs.Stage(flower);
@@ -35,10 +37,20 @@ function getStarted() {
     window.addEventListener('keyup', fingerUp);
 
     addEnemies();
-    scoreText = new createjs.Text("Score: ", "30 Courier", "#FFF"+score);
-    stage.addChild(scoreText);
-    console.log("Score: " + score);
 
+    //score
+    scoreText = new createjs.Text("Score: "+score, "50 Courier", "#FFF");
+    stage.addChild(scoreText);
+
+    //level
+    levelText = new createjs.Text("Level: "+level, "50 Courier", "#FFF");
+    stage.addChild(levelText);
+    levelText.x=100;
+
+    //lives
+    livesText = new createjs.Text("Lives: "+lives, "50 Courier", "#FFF");
+    stage.addChild(livesText);
+    livesText.x=200;
 }
 
 function moveHero() {
@@ -120,6 +132,18 @@ function addEnemies() {
         stage.addChild(p);
        // p.addEventListener(hitTest, removeEnemies);
         enemies.push(p);
+        var goAgain=true;
+        while(goAgain){
+            goAgain=false;
+            for (var i = 0; i < stones.length; i++) {
+                if (stones[i].y < 0 && hitTest(p, stones[i])) {
+                    p.x = Math.floor(Math.random() * stage.canvas.width);
+                    goAgain=true;
+                    console.log("trying new position");
+                    break;
+                }
+            }
+        }
     }
     if(level>1 && rand<1){
         var st= ["stone_1.png", 'stone_2.png', 'stone_3.png'];
@@ -129,7 +153,8 @@ function addEnemies() {
         p.y = -100;
         p.x = Math.floor(Math.random() * stage.canvas.width);
 
-
+        stage.addChild(p);
+        stones.push(p);
         //different places
         var goAgain=true;
                while(goAgain){
@@ -144,20 +169,9 @@ function addEnemies() {
             }
         }
 
-        while(goAgain){
-            goAgain=false;
-            for (var i = 0; i < enemies.length; i++) {
-                if (enemies[i].y < 0 && hitTest(p, enemies[i])) {
-                    p.x = Math.floor(Math.random() * stage.canvas.width);
-                    goAgain=true;
-                    console.log("trying new position");
-                    break;
-                }
-            }
-        }
 
-        stage.addChild(p);
-        stones.push(p);
+
+
     }
 }
 
@@ -187,6 +201,7 @@ function hitTest(rect1, rect2){
     if (lives === 0) {
         console.log("You are dead");
     }
+     livesText.text="Lives: "+lives;
 }
  function checkCollisions() {
     var e;
@@ -240,11 +255,15 @@ function hitTest(rect1, rect2){
 
 function scoreUp() {
     score++;
+    console.log("Score: "+score);
     if (score >= level*scoreToNextLevel) {
         level++;
-        console.log("Level: " + score)
+        console.log("Level: " + level)
     }
-    //scoreText="Score: "+score;
+    scoreText.text="Score: "+score;
+    levelText.text="Level: "+level;
+
+
 }
 
 
