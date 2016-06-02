@@ -1,6 +1,7 @@
 var stage;
 var level = 1;
 var scoreToNextLevel=2;
+var getStarted = false;
 var lives = 3;
 var score = 0;
 var stones=[];
@@ -38,19 +39,29 @@ function getStarted() {
 
     addEnemies();
 
-    //score
+    //display score
     scoreText = new createjs.Text("Score: "+score, "50 Courier", "#FFF");
     stage.addChild(scoreText);
 
-    //level
+    // display level
     levelText = new createjs.Text("Level: "+level, "50 Courier", "#FFF");
     stage.addChild(levelText);
     levelText.x=100;
 
-    //lives
+    // display lives
     livesText = new createjs.Text("Lives: "+lives, "50 Courier", "#FFF");
     stage.addChild(livesText);
     livesText.x=200;
+    
+    //start game
+    var splash = new createjs.Bitmap("img/bg1.png");
+    splash.addEventListener('click', function(e){
+            console.log(e);
+            stage.removeChild(e.target);
+            getStarted=true;
+        }
+    );
+    stage.addChild(splash);
 }
 
 function moveHero() {
